@@ -32,3 +32,6 @@ nohup: ignoring input
 [10/Feb/2015 19:04:58] "GET / HTTP/1.1" 200 16609
 [10/Feb/2015 19:04:58] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 0
 [10/Feb/2015 19:04:58] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 0
+[10/Feb/2015 19:15:00] "GET / HTTP/1.1" 200 16609
+[10/Feb/2015 19:15:00] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 0
+[10/Feb/2015 19:15:00] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 0
