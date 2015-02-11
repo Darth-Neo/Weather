@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1> Temperature </h1>
+
+<ul>
+    {% for temperature in object_list %}
+    <li class='temperature'>
+      <a href="{{ temperature.get_absolute_url }}">{{ temperature }}</a>
+      (<a href="{% url "temperature_edit" pk=temperature.id %}">edit</a>) 
+    </li>
+    {% endfor %}
+</ul>
+
+<a href="{% url "temperature_new" %}">add temperature</a>
+{% endblock %}
+

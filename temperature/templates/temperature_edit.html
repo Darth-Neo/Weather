@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if temperature.id %}
+<h1>Edit Temperature</h1>
+{% else %}
+<h1>Add Temperature</h1>
+{% endif %}
+
+<form action="{{ action }}" method="POST">
+  {% csrf_token %}
+  <ul>
+    {{ form.as_ul }}
+  </ul>
+  {% if temperature.id %}
+    <a href="{% url "temperature_delete" pk=temperature.id %}">Delete</a>
+  {% endif %}
+  <input id="temperature_save" type="submit" value="Save" />
+</form>
+
+<a href="{% url "temperature_list" %}">back to list</a>
+
+{% endblock %}
