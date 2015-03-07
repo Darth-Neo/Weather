@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Weather.iml" filepath="$PROJECT_DIR$/.idea/Weather.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../d3/.idea/d3.iml" filepath="$PROJECT_DIR$/../d3/.idea/d3.iml" />
+      <module fileurl="file://$USER_HOME$/pydev/.idea/pydev.iml" filepath="$USER_HOME$/pydev/.idea/pydev.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../lib/python2.7/site-packages/.idea/site-packages.iml" filepath="$PROJECT_DIR$/../lib/python2.7/site-packages/.idea/site-packages.iml" />
+    </modules>
+  </component>
+</project>
