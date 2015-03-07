@@ -1,27 +1,87 @@
 #!/usr/bin/python
-
+import os.path
 import sqlite3
+from datetime import datetime
+
+def existsFile(file_path):
+
+    #print("CWD = %s" % os.getcwd())
+
+    if os.path.isfile(file_path):
+        return True
+    else:
+        return False
+
+def getTemperatures(conn=None):
+
+    if conn == None:
+        file_path = "/home/james.morris/rpi/Weather/Weather.db"
+        if existsFile(file_path):
+            conn = sqlite3.connect(file_path)
+        else:
+            print("File not found - %s" % file_path)
+
+    sel = "select ReadingDateTime, TempF, Humidity from temperature_temperature order by ReadingDateTime desc"
+    cursor = conn.execute(sel)
+
+    listRows = list()
+    for row in cursor:
+
+       #print("ID = %s\tReadingDateTime = %s\tTempC = %s\tTempf = %s\t Humidity = %s" %
+       #     (row[0], row[1], row[2], row[3], row[4]))
+
+       listRows.append([x for x in row])
+
+    return listRows
 
 def determineTables(conn):
     # Determine Table Names
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    print(cursor.fetchall())
+    #print(cursor.fetchall())
 
 def printTemperatures(conn):
 
-    ins = "select * from temperature_temperature"
+    ins = "select ID, ReadingDateTime, TempC, TempF, Humidity from temperature_temperature order by ReadingDateTime"
     cursor = conn.execute(ins)
     
     for row in cursor:
        print("ID = %s\tReadingDateTime = %s\tTempC = %s\tTempf = %s\t Humidity = %s" % 
-            (row[0], row[1], row[2], row[3], row[4])) 
+            (row[0], row[1], row[2], row[3], row[4]))
+
 if __name__ == "__main__":
-    conn = sqlite3.connect('../Weather.db')
+    #conn = sqlite3.connect('../Weather.db')
+    #print "Opened database successfully"
 
-    print "Opened database successfully";
+    now = datetime.now()
+    #print("Now: %s" % now)
 
-    printTemperatures(conn)
+    lr = getTemperatures()
 
+    x = list()
+    x.append(0.0)
 
+    y = list()
+    y.append(0.0)
 
+    for wl in lr[0:20]:
+        print ("x : %s" % x)
+        strDT = wl[0][:-1]
+        print ("strDT : %s" % strDT)
+        strDT = strDT[0:6] + " 2015" + strDT[7:]
+        dt = datetime.strptime(strDT, '%b %d %Y %I:%M %p')
+        print("dt : %s" % dt)
+
+        td = now - dt
+        tdm = td.seconds / 60.0
+
+        print("tdm : %5.2f" % tdm)
+        x.append(tdm)
+
+        strTempF = wl[1][:-2]
+        tf = float(strTempF)
+        print("tf : %3.2f" % tf)
+        y.append(tf)
+
+    print("%s" % x)
+    print("%s" % y)

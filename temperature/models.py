@@ -8,9 +8,15 @@ class Temperature(models.Model):
     TempF = models.CharField( max_length=255,)
     Humidity = models.CharField(max_length=255,)
 
+    class Meta:
+        ordering = ["-id"]
+        #ordering = ["-ReadingDateTime"]
+
+
     def __str__(self):
 
-        return ' '.join([ self.ReadingDateTime, self.TempC, self.TempF, self.Humidity, ])
+        return ' '.join([ self.ReadingDateTime, self.TempF, self.Humidity, ])
+
 
     def get_absolute_url(self):
 

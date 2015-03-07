@@ -13,12 +13,12 @@ def determineTables(conn):
 
 def printTemperatures(conn):
 
-    ins = "select * from temperature_temperature"
-    cursor = conn.execute(ins)
+    sel = "select ReadingDateTime, TempC, TempF, Humidity from temperature_temperature order by ReadingDateTime desc"
+    cursor = conn.execute(sel)
     
     for row in cursor:
-       print("ID = %s\tReadingDateTime = %s\tTempC = %s\tTempf = %s\t Humidity = %s" % 
-            (row[0], row[1], row[2], row[3], row[4])) 
+       print("ReadingDateTime = %s\tTempC = %s\tTempf = %s\t Humidity = %s" %
+            (row[0], row[1], row[2], row[3]))
 
 def getID(conn):
     ins = "select max(id) from temperature_temperature"
@@ -50,7 +50,7 @@ def insertTemperature(conn):
     conn.commit()
 
 if __name__ == "__main__":
-    conn = sqlite3.connect('/home/pi/rpipy/src/Weather.db')
+    conn = sqlite3.connect('/home/james.morris/rpi/Weather/Weather.db')
 
     print "Opened database successfully";
 
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     #determineTables(conn)
 
-    insertTemperature(conn)
+    #insertTemperature(conn)
 
     printTemperatures(conn)
 

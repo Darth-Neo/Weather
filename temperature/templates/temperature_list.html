@@ -2,17 +2,139 @@
 
 {% block content %}
 
-<h1> Temperature </h1>
+<h1 > Temperature </h1>
+<h2 > Readings = {{ readings }}
 
-<ul>
-    {% for temperature in object_list %}
-    <li class='temperature'>
-      <a href="{{ temperature.get_absolute_url }}">{{ temperature }}</a>
-      (<a href="{% url "temperature_edit" pk=temperature.id %}">edit</a>) 
-    </li>
-    {% endfor %}
-</ul>
+<table class="table">
+    <tr>
+        <td>
+            <table class='table table-striped' border="1px solid black">
+            <tr>
+                <td>
+                    <h2 > Max = {{ maxTemperature }} </h2>
+                </td>
+                <td>
+                    <h2 > Max = {{ maxHumidity }} </h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2 > Min = {{ minTemperature }} </h2>
+                </td>
+                <td>
+                    <h2 > Min = {{ minHumidity }} </h2>
+                </td>
+            </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="{% url "temperature_new" %}" class="btn btn-info">Add Temperature</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <img src="charts/simple.png" alt="Weather Trends" style="width:1208px;height:456px">
+        </td>
+    </tr>
+    <tr>
+        <td >
+            <table class="table">
+                <tr>
+                    <td>
+                        {% if is_paginated %}
+                            <ul class='pagination pagination-sm'>
+                                <li>
+                                    <a href="{% url "temperature_list" %}?page=1"> << </a>
+                                </li>
 
-<a href="{% url "temperature_new" %}">add temperature</a>
+                                {% if page_obj.has_previous %}
+                                    <li class="previous">
+                                        <a href="{% url "temperature_list" %}?page={{page_obj.previous_page_number}}"> < </a>
+                                    </li>
+                                {% endif %}
+
+                                <li>
+                                     <span> Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} </span>
+                                </li>
+
+                                {% if page_obj.has_next %}
+                                    <li class="next">
+                                        <a href="{% url "temperature_list" %}?page={{ page_obj.next_page_number }}"> > </a>
+                                    </li>
+                                {% endif %}
+
+                                <li>
+                                    <a href="{% url "temperature_list" %}?page={{ page_obj.paginator.num_pages }}"> >> </a>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table class='table table-striped' width="50%" border="1px solid black">
+                            <tr>
+                                <th text-align='center'><h3> Reading Time</h3></th>
+                                <th text-align='center'><h3>Temp (F)</h3></th>
+                                <th text-align='center'><h3>Humidity</h3></th>
+                                <th text-align='center'><h3>Action</h3></th>
+                            </tr>
+                            {% for temperature in object_list %}
+                            <tr>
+                                <td>
+                                    <a class="small" href="{{ temperature.get_absolute_url }}"> {{ temperature.ReadingDateTime }} </a>
+                                </td>
+                                <td>
+                                    <a class="small" href="{{ temperature.get_absolute_url }}"> {{ temperature.TempF }} </a>
+                                </td>
+                                <td>
+                                    <a class="small" href="{{ temperature.get_absolute_url }}"> {{ temperature.Humidity }} </a>
+                                </td>
+                                <td>
+                                    <a class="small" href="{% url 'temperature_edit' pk=temperature.id %}"> edit </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% if is_paginated %}
+                            <ul class='pagination pagination-sm'>
+                                <li>
+                                    <a href="{% url "temperature_list" %}?page=1"> << </a>
+                                </li>
+
+                                {% if page_obj.has_previous %}
+                                    <li class="previous">
+                                        <a href="{% url "temperature_list" %}?page={{page_obj.previous_page_number}}"> < </a>
+                                    </li>
+                                {% endif %}
+
+                                <li>
+                                     <span> Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} </span>
+                                </li>
+
+                                {% if page_obj.has_next %}
+                                    <li class="next">
+                                        <a href="{% url "temperature_list" %}?page={{ page_obj.next_page_number }}"> > </a>
+                                    </li>
+                                {% endif %}
+
+                                <li>
+                                    <a href="{% url "temperature_list" %}?page={{ page_obj.paginator.num_pages }}"> >> </a>
+                                </li>
+                           </ul>
+                        {% endif %}
+                    </td>
+                </tr>
+             </table>
+        </td>
+    </tr>
+</table>
+
 {% endblock %}
 
