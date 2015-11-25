@@ -1,66 +1,72 @@
-#!/usr/bin/python
-
+#!/usr/bin/env python
+import os
 import sqlite3
+from Logger import *
+
+logger = setupLogging(u"tft_ip")
+logger.setLevel(DEBUG)
+
 
 def determineTables(conn):
-    print("Tables...")
+    print(u"Tables...")
 
     # Determine Table Names
     cursor = conn.cursor()
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    cursor.execute(u"SELECT name FROM sqlite_master WHERE type='table';")
     for x in cursor.fetchall():
-        print("%s" % x) 
+        print(u"%s" % x)
 
-def printTemperatures(conn):
 
-    sel = "select ReadingDateTime, TempC, TempF, Humidity from temperature_temperature order by ReadingDateTime desc"
-    cursor = conn.execute(sel)
-    
+def fixReadings():
+    """
+    select ReadingDateTime, max(TempF) from temperature_temperature;
+    select ReadingDateTime, min(TempF) from temperature_temperature;
+    """
+
+    conn_str1 = home + os.sep + u"Weather.db"
+    conn1 = sqlite3.connect(conn_str1)
+
+    conn_str2 = home + os.sep + u"Weather.db"
+    conn2 = sqlite3.connect(conn_str2)
+
+    cast1 = u"select TempF, cast(TempF as Real) from temperature_temperature where TempF like'2%';"
+    cast2 = u"update temperature_temperature set TempF = cast(TempF as Real) * 1.8 + 32.0 where TempF like'2%';"
+
+    del1 = u"delete from temperature_temperature where ReadingDateTime like '7%'"
+
+    sel1 = u"select ReadingDateTime, TempF, Humidity, Barometer from temperature_temperature"
+    sel2 = u"where ReadingDateTime like '7%'"
+
+    qs1 = u"insert into temperature_temperature (ReadingDateTime, TempF, Humidity, Barometer) values "
+    # qs2 = u"('%s', '%3.1f*F', '%0.2f%%', '%3.2f')" % (dtMessage, Tempf, humidity, barometer)
+
+    cursor = conn.execute(sel1)
+
     for row in cursor:
-       print("ReadingDateTime = %s\tTempC = %s\tTempf = %s\t Humidity = %s" %
+        print(u"ReadingDateTime = %s\tTempf = %s\tHumidity = %s\tBarometer = %s" %
             (row[0], row[1], row[2], row[3]))
 
-def getID(conn):
-    ins = "select max(id) from temperature_temperature"
-    cursor = conn.execute(ins)
 
-    #data = int(cursor.fetchone())
-    #print ("%s" % data)
+def printReadings(conn):
+    sel = u"select ReadingDateTime, TempF, Humidity, Barometer from temperature_temperature order by id desc"
+
+    cursor = conn.execute(sel)
 
     for row in cursor:
-	id = int(row[0])
-        print ("%s" % row[0])
-        break
-    return id
-
-def insertTemperature(conn):
-    # 2015-02-07 22:15:01 22.20*C 71.96*f 50.80% (edit)
-
-    id = getID(conn) + 1
-    dtMessage = "2015-02-07 23:00:00" 
-    temperature = "22.20*C"
-    f = "71.96*f"
-    humidity = "50.80%"
-
-    qs = "insert into temperature_temperature (id, ReadingDateTime, TempC, TempF, Humidity) values (%d, '%s', '%s', '%s', '%s')" % (id, dtMessage, temperature, f, humidity)
-    print qs
-
-    cursor = conn.execute(qs)
-
-    conn.commit()
-
-if __name__ == "__main__":
-    conn = sqlite3.connect('/home/james.morris/rpi/Weather/Weather.db')
-
-    print "Opened database successfully";
-
-    getID(conn)
-
-    #determineTables(conn)
-
-    #insertTemperature(conn)
-
-    printTemperatures(conn)
+        print(u"ReadingDateTime = %s\tTempf = %s\tHumidity = %s\tBarometer = %s" %
+              (row[0], row[1], row[2], row[3]))
 
 
+if __name__ == u"__main__":
+
+    home = os.getcwd()
+
+    conn_str = home + os.sep + u"Weather.db"
+    conn = sqlite3.connect(conn_str)
+
+    print(u"Opened database successfully")
+
+    # determineTables(conn)
+
+    printReadings(conn)
 

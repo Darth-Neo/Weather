@@ -1,23 +1,19 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 
-class Temperature(models.Model):
 
-    ReadingDateTime = models.CharField(max_length=255,)
-    TempC = models.CharField(max_length=255,)
-    TempF = models.CharField( max_length=255,)
-    Humidity = models.CharField(max_length=255,)
+class Temperature(models.Model):
+    ReadingDateTime = models.CharField(max_length=255, )
+    TempF = models.CharField(max_length=255, )
+    Humidity = models.CharField(max_length=255, )
+    Barometer = models.CharField(max_length=255, )
 
     class Meta:
-        ordering = ["-id"]
-        #ordering = ["-ReadingDateTime"]
-
+        ordering = [u"-id"]
+        # ordering = [u"-ReadingDateTime"]
 
     def __str__(self):
-
-        return ' '.join([ self.ReadingDateTime, self.TempF, self.Humidity, ])
-
+        return u"%s %s %s %s" % (self.ReadingDateTime, self.TempF, self.Humidity, self.Barometer, )
 
     def get_absolute_url(self):
-
-        return reverse('temperature_view', kwargs={'pk': self.id})
+        return reverse(u'temperature_view', kwargs={u'pk': self.id})
