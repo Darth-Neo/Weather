@@ -3,18 +3,18 @@ import os
 import sqlite3
 from Logger import *
 
-logger = setupLogging(u"tft_ip")
+logger = setupLogging(__file__)
 logger.setLevel(DEBUG)
 
 
 def determineTables(conn):
-    print(u"Tables...")
+    logger.debug(u"Tables...")
 
     # Determine Table Names
     cursor = conn.cursor()
     cursor.execute(u"SELECT name FROM sqlite_master WHERE type='table';")
     for x in cursor.fetchall():
-        print(u"%s" % x)
+        logger.debug(u"%s" % x)
 
 
 def fixReadings():
@@ -29,6 +29,9 @@ def fixReadings():
     conn_str2 = home + os.sep + u"Weather.db"
     conn2 = sqlite3.connect(conn_str2)
 
+    # qs1 = u"insert into temperature_temperature (ReadingDateTime, TempF, Humidity, Barometer) values "
+    # qs2 = u"('%s', '%3.1f*F', '%0.2f%%', '%3.2f')" % (dtMessage, Tempf, humidity, barometer)
+
     cast1 = u"select TempF, cast(TempF as Real) from temperature_temperature where TempF like'2%';"
     cast2 = u"update temperature_temperature set TempF = cast(TempF as Real) * 1.8 + 32.0 where TempF like'2%';"
 
@@ -37,14 +40,14 @@ def fixReadings():
     sel1 = u"select ReadingDateTime, TempF, Humidity, Barometer from temperature_temperature"
     sel2 = u"where ReadingDateTime like '7%'"
 
-    qs1 = u"insert into temperature_temperature (ReadingDateTime, TempF, Humidity, Barometer) values "
-    # qs2 = u"('%s', '%3.1f*F', '%0.2f%%', '%3.2f')" % (dtMessage, Tempf, humidity, barometer)
-
     cursor = conn.execute(sel1)
 
     for row in cursor:
-        print(u"ReadingDateTime = %s\tTempf = %s\tHumidity = %s\tBarometer = %s" %
-            (row[0], row[1], row[2], row[3]))
+        if row[0][-1:] == os.linesep:
+            row[0] = row[0][:-1]
+
+        logger.debug(u"ReadingDateTime = %s\tTempf = %s\tHumidity = %s\tBarometer = %s" %
+                     (row[0], row[1], row[2], row[3]))
 
 
 def printReadings(conn):
@@ -53,12 +56,11 @@ def printReadings(conn):
     cursor = conn.execute(sel)
 
     for row in cursor:
-        print(u"ReadingDateTime = %s\tTempf = %s\tHumidity = %s\tBarometer = %s" %
-              (row[0], row[1], row[2], row[3]))
+        logger.debug(u"ReadingDateTime = %s\tTempf = %s\tHumidity = %s\tBarometer = %s" %
+                     (row[0], row[1], row[2], row[3]))
 
 
 if __name__ == u"__main__":
-
     home = os.getcwd()
 
     conn_str = home + os.sep + u"Weather.db"
@@ -69,4 +71,3 @@ if __name__ == u"__main__":
     # determineTables(conn)
 
     printReadings(conn)
-

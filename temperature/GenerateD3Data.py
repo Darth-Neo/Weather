@@ -44,13 +44,13 @@ class GenerateD3Data(object):
             if self._existsFile(dbFileInput):
                 self._conn = sqlite3.connect(dbFileInput)
             else:
-                print(u"File not found - %s" % dbFileInput)
+                logger.error(u"File not found - %s" % dbFileInput)
                 raise IOError
         else:
             if self._existsFile(fileInput):
                 self._conn = sqlite3.connect(fileInput)
             else:
-                print(u"File not found - %s" % fileInput)
+                logger.error(u"File not found - %s" % fileInput)
                 raise IOError
 
         if fileOutput is None:
@@ -72,6 +72,21 @@ class GenerateD3Data(object):
         else:
             return False
 
+    @staticmethod
+    def _fixReading(v):
+        newV = 0
+
+        if v < 1.0:
+            newV = v * 100.0
+        elif v < 10.0:
+            newV = v * 10.0
+        elif v < 100.0:
+            newV = v
+        elif v < 1000.0:
+            newV = v / 10.0
+
+        return newV
+
     def _saveDataTSV(self):
         """
         Save Data to load into D3
@@ -85,8 +100,14 @@ class GenerateD3Data(object):
                     % os.linesep)
 
             for k, v in sorted_adt:
-                f.write("%s\t%3.2f\t%3.2f\t%3.2f\t%3.2f\t%3.2f\t%3.2f%s" % (k, v[0], v[1], v[2]/10.00,
-                                                                          v[3], v[4], v[5]/10.00, os.linesep))
+                v2 = GenerateD3Data._fixReading(v[2])
+                v5 = GenerateD3Data._fixReading(v[5])
+
+                vRow = "%s\t%3.2f\t%3.2f\t%3.2f\t%3.2f\t%3.2f\t%3.2f%s" % (k, v[0], v[1], v2,
+                                                                           v[3], v[4], v5, os.linesep)
+
+                f.write(vRow)
+                logger.debug(u"vRow : %s" % vRow)
 
     def _computeValues(self):
         """
@@ -149,47 +170,46 @@ class GenerateD3Data(object):
         Generate D3 Data
         :return:
         """
+        strDT = None
 
         sel1 = u"select ReadingDateTime, TempF, Humidity, Barometer from temperature_temperature "
-        sel2 = u" order by ReadingDateTime desc"
+        sel2 = u" order by id desc"
         sel = sel1 + sel2
 
         cursor = self._conn.execute(sel)
 
         for row in cursor:
-            strDT = row[0].rstrip()
+            # str_row = u" ".join([x for x in row])
 
-            dlp = strDT.split()
-            month = dlp[0]
-            day = dlp[1]
+            if row[0][-1:] == os.linesep:
+                strDT = row[0][0:-1]
+            else:
+                strDT = row[0]
 
-            strDT = month + u" " + day + u" 2015 " + strDT[7:]
+            logger.debug(u"1 strDT : %s" % strDT)
+
+            strDTY = u"2015 %s" % strDT
+            logger.debug(u"2 strDTY : %s" % strDTY)
 
             try:
-                dt = datetime.strptime(strDT, u'%b %d %Y %I:%M %p')
+                dt = datetime.strptime(strDTY, u'%Y %b %d  %I:%M %p')
             except Exception, msg:
-                logger.warn(u"%s" % msg)
-                try:
-                    dt = datetime.strptime(strDT, u'%b %d %Y %I:%M%p')
-                except Exception, msg:
-                    logger.warn(u"%s" % msg)
-                    try:
-                        dt = datetime.strptime(strDT, u'%Y-%m-%d %I:%M:%S')
-                    except Exception, msg:
-                        logger.error(u"%s" % msg)
-                        continue
+                logger.warn(u"%s - %s" % (msg, strDTY))
+                continue
 
             y = dt.year
             m = dt.month
+            d = dt.day
 
             if m < 10:
                 m = u"0%s" % m
 
-            d = dt.day
             if d < 10:
                 d = u"0%s" % d
 
             strDate = u"%4s%2s%2s" % (y, m, d)
+
+            logger.debug(u"%s" % strDate)
 
             strTempF = row[1][:-2]
             strHumidity = row[2][:-2]

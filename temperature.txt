@@ -1,8 +1,0 @@
-nohup: ignoring input
-[10/Feb/2015 23:45:02] "GET / HTTP/1.1" 200 4097
-[10/Feb/2015 23:45:02] "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 0
-[10/Feb/2015 23:45:02] "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 0
-[10/Feb/2015 23:45:17] "GET /list?page=2 HTTP/1.1" 200 4162
-[10/Feb/2015 23:45:28] "GET /list?page=3 HTTP/1.1" 200 4162
-[10/Feb/2015 23:45:31] "GET /list?page=4 HTTP/1.1" 200 4190
-[10/Feb/2015 23:45:37] "GET /list?page=5 HTTP/1.1" 200 3023

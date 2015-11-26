@@ -30,7 +30,7 @@ def setupLogging(name):
     consoleHandler.setFormatter(logFormatter)
     logger.addHandler(consoleHandler)
 
-    fileHandler = logging.handlers.RotatingFileHandler(logFile, maxBytes=10485760, backupCount=5)
+    fileHandler = logging.handlers.RotatingFileHandler(logFile, maxBytes=10485760, backupCount=2)
     fileHandler.setFormatter(logFormatter)
     logger.addHandler(fileHandler)
 
