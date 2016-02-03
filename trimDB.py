@@ -24,7 +24,7 @@ def countReadings(conn):
 
 
 def trimReadings(conn, month):
-    logger.info("Trim %s%s" % (month[:-1], os.linesep)
+    logger.info("Trim %s%s" % (month[:-1], os.linesep))
 
     c = conn.cursor()
 
@@ -35,15 +35,15 @@ def trimReadings(conn, month):
     c.execute(trim, t)
 
 if __name__ == u"__main__":
-    home = os.getcwd()
 
-    conn_str = home + os.sep + u"Weather.db"
-    conn = sqlite3.connect(conn_str)
+    conn_str = u".%sWeather.db" % os.sep
 
+    logger.info("Using : %s" % conn_str)
     tm = months[9] 
 
-    trimReadings(conn, tm)
-
-    countReadings(conn)
+    with sqlite3.connect(conn_str) as conn:
+        # trimReadings(conn, tm)
+        countReadings(conn)
+    
 
 
