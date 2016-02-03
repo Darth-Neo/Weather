@@ -16,7 +16,7 @@ from matplotlib.figure import Figure
 from matplotlib.dates import DateFormatter
 from Logger import *
 
-logger = setupLogging(u"charts")
+logger = setupLogging(__file__)
 logger.setLevel(DEBUG)
 
 

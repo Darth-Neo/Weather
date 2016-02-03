@@ -35,7 +35,7 @@ class GenerateD3Data(object):
             pathDir = u"/home/james.morris/PythonDev/Django/Weather"
 
         db_file = u"Weather.db"
-        data_file = u"data.tsv.run"
+        data_file = u"data.tsv"
 
         if fileInput is None:
 
@@ -116,21 +116,23 @@ class GenerateD3Data(object):
 
         for k, v in self.dl.items():
 
-            minF = 1000
-            minH = 1000
-            minB = 1000
+            minF = 1000.0
+            minH = 1000.0
+            minB = 1000.0
 
-            maxF = 0
-            maxH = 0
-            maxB = 0
+            maxF = 0.0
+            maxH = 0.0
+            maxB = 0.0
 
             for f, h, b in v:
                 try:
-                    ff = float(f)
-                    fh = float(h)
+                    ff = float(f); fh = float(h); fb = float(b)
+
+                    if fh < 1.00:
+                        continue
+
                     if b is None:
                         b = 0.0
-                    fb = float(b)
 
                     if ff > maxF:
                         maxF = ff
