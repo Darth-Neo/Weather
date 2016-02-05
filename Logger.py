@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 #
-# Python Logging
+# Logging
 #
-# __VERSION__ = 0.1
-# __author__ = u'morrj140'
+__VERSION__ = 0.1
+__author__ = u'morrj140'
+
 import logging
 import logging.handlers
 
@@ -34,6 +35,5 @@ def setupLogging(name):
     logger.addHandler(fileHandler)
 
     return logger
-
 
 

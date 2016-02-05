@@ -7,12 +7,13 @@ Generate D3 Data as needed
 import os
 import os.path
 import sqlite3
+import time
 from datetime import datetime
 import operator
 from Logger import *
 
 logger = setupLogging(u"GenerateD3Data")
-logger.setLevel(INFO)
+logger.setLevel(DEBUG)
 
 
 class GenerateD3Data(object):
@@ -35,7 +36,7 @@ class GenerateD3Data(object):
             pathDir = u"/home/james.morris/PythonDev/Django/Weather"
 
         db_file = u"Weather.db"
-        data_file = u"data.tsv"
+        data_file = u"data.tsv.run"
 
         if fileInput is None:
 
@@ -180,63 +181,71 @@ class GenerateD3Data(object):
 
         cursor = self._conn.execute(sel)
 
+        n = 0
         for row in cursor:
-            # str_row = u" ".join([x for x in row])
 
             if row[0][-1:] == os.linesep:
                 strDT = row[0][0:-1]
             else:
                 strDT = row[0]
 
-            logger.debug(u"1 strDT : %s" % strDT)
+            logger.info(u".%s." % strDT[0:9])
+            if strDT[0:9] == u"2016 2015":
+                p1 = strDT[0:4]
+                p2 = strDT[10:]
+                strDT = p1 + u" " + p2
 
-            strDTY = u"2015 %s" % strDT
-            logger.debug(u"2 strDTY : %s" % strDTY)
+            p3 = strDT[-3:]
+            if p3[0] != u" ":
+                p4 = strDT[-2:]
+                strDT = strDT[:-2] + u" " + p4
 
             try:
-                dt = datetime.strptime(strDTY, u'%Y %b %d  %I:%M %p')
+                dt = datetime.strptime(strDT, u'%Y %b %d  %I:%M %p')
+
+                y = dt.year
+                m = dt.month
+                d = dt.day
+
+                if m < 10:
+                    m = u"0%s" % m
+
+                if d < 10:
+                    d = u"0%s" % d
+
+                strDate = u"%4s%2s%2s" % (y, m, d)
+
+                logger.debug(u"%s" % strDate)
+
+                strTempF = row[1][:-2]
+                strHumidity = row[2][:-2]
+
+                if row[3] is None:
+                    strBarometer = 0.0
+                else:
+                    strBarometer = row[3]
+
+                ct = list()
+                ct.append(strTempF)
+                ct.append(strHumidity)
+                ct.append(strBarometer)
+
+                if strDate in self.dl:
+                    self.dl[strDate].append(ct)
+                else:
+                    nl = list()
+                    nl.append(ct)
+                    self.dl[strDate] = nl
+
             except Exception, msg:
-                logger.warn(u"%s - %s" % (msg, strDTY))
-                continue
-
-            y = dt.year
-            m = dt.month
-            d = dt.day
-
-            if m < 10:
-                m = u"0%s" % m
-
-            if d < 10:
-                d = u"0%s" % d
-
-            strDate = u"%4s%2s%2s" % (y, m, d)
-
-            logger.debug(u"%s" % strDate)
-
-            strTempF = row[1][:-2]
-            strHumidity = row[2][:-2]
-
-            if row[3] is None:
-                strBarometer = 0.0
-            else:
-                strBarometer = row[3]
-
-            ct = list()
-            ct.append(strTempF)
-            ct.append(strHumidity)
-            ct.append(strBarometer)
-
-            if strDate in self.dl:
-                self.dl[strDate].append(ct)
-            else:
-                nl = list()
-                nl.append(ct)
-                self.dl[strDate] = nl
+                n += 1
+                logger.warn(u"%s" % msg)
 
         self._computeValues()
 
         self._saveDataTSV()
 
+        logger.warn(u"Errors : %d" % n)
 
 if __name__ == u"__main__":
     gd3d = GenerateD3Data()

@@ -29,14 +29,14 @@ def existsFile(file_path):
         return False
 
 
-def getReadings(conn=None):
+def getReadings(con=None):
 
-    if conn is None:
+    if con is None:
 
         file_path = os.getcwd() + os.sep + u"Weather"
 
         if existsFile(file_path):
-            conn = sqlite3.connect(file_path)
+            con = sqlite3.connect(file_path)
         else:
             logger.error(u"File not found - %s" % file_path)
 

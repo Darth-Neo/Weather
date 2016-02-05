@@ -38,16 +38,22 @@ def fixReadings():
     del1 = u"delete from temperature_temperature where ReadingDateTime like '7%'"
 
     sel1 = u"select ReadingDateTime, TempF, Humidity, Barometer from temperature_temperature"
-    sel2 = u"where ReadingDateTime like '7%'"
 
-    cursor = conn.execute(sel1)
+    upd1 = u"update temperature_temperature set ReadingDateTime = printf('2015 %s', ReadingDateTime);"
+    upd2 = u"update temperature_temperature set ReadingDateTime = printf('2016 %s', ReadingDateTime)  where id > 49421;"
 
-    for row in cursor:
-        if row[0][-1:] == os.linesep:
-            row[0] = row[0][:-1]
+    if True:
+        cursor = conn.execute(upd1)
+        cursor = conn.execute(upd2)
+        conn.commit()
+    else:
+        cursor = conn.execute(sel1)
+        for row in cursor:
+            if row[0][-1:] == os.linesep:
+                row[0] = row[0][:-1]
 
-        logger.debug(u"ReadingDateTime = %s\tTempf = %s\tHumidity = %s\tBarometer = %s" %
-                     (row[0], row[1], row[2], row[3]))
+            logger.debug(u"ReadingDateTime = %s\tTempf = %s\tHumidity = %s\tBarometer = %s" %
+                         (row[0], row[1], row[2], row[3]))
 
 
 def printReadings(conn):
@@ -69,5 +75,7 @@ if __name__ == u"__main__":
     print(u"Opened database successfully")
 
     # determineTables(conn)
+    # printReadings(conn)
+    fixReadings()
 
-    printReadings(conn)
+    conn.close()
