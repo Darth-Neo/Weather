@@ -13,7 +13,7 @@ import operator
 from Logger import *
 
 logger = setupLogging(u"GenerateD3Data")
-logger.setLevel(DEBUG)
+logger.setLevel(INFO)
 
 
 class GenerateD3Data(object):

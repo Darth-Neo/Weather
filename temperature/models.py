@@ -10,7 +10,6 @@ class Temperature(models.Model):
 
     class Meta:
         ordering = [u"-id"]
-        # ordering = [u"-ReadingDateTime"]
 
     def __str__(self):
         return u"%s %s %s %s" % (self.ReadingDateTime, self.TempF, self.Humidity, self.Barometer, )

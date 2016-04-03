@@ -57,7 +57,7 @@ def fixReadings():
 
 
 def printReadings(conn):
-    sel = u"select ReadingDateTime, TempF, Humidity, Barometer from temperature_temperature order by id desc"
+    sel = u"select ReadingDateTime, TempF, Humidity, Barometer from temperature_temperature order by id desc limit 50"
 
     cursor = conn.execute(sel)
 
@@ -75,7 +75,7 @@ if __name__ == u"__main__":
     print(u"Opened database successfully")
 
     # determineTables(conn)
-    # printReadings(conn)
-    fixReadings()
+    printReadings(conn)
+    # : fixReadings()
 
     conn.close()

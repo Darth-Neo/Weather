@@ -6,7 +6,7 @@ from django.forms.models import inlineformset_factory
 from models import Temperature
 
 
-class TemperatureForm(forms.ModelForm):
+class TemperatureForm(models.ModelForm):
     confirm_email = forms.EmailField(
         label=u"Confirm email",
         required=True,

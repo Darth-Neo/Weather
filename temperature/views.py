@@ -241,6 +241,8 @@ class CreateTemperatureView(CreateView):
 class UpdateTemperatureView(UpdateView):
 
     model = Temperature
+    fields = "__all__"
+    
     template_name = u'temperature_edit.html'
 
     def get_success_url(self):
