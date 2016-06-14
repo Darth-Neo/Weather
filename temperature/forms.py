@@ -7,6 +7,7 @@ from models import Temperature
 
 
 class TemperatureForm(models.ModelForm):
+    
     confirm_email = forms.EmailField(
         label=u"Confirm email",
         required=True,
@@ -16,7 +17,6 @@ class TemperatureForm(models.ModelForm):
         model = Temperature
 
     def __init__(self, *args, **kwargs):
-
         if kwargs.get(u'instance'):
             email = kwargs[u'instance'].email
             kwargs.setdefault(u'initial', {})[u'confirm_email'] = email
@@ -24,7 +24,6 @@ class TemperatureForm(models.ModelForm):
         super(TemperatureForm, self).__init__(*args, **kwargs)
 
     def clean(self):
-
         if (self.cleaned_data.get(u'email') !=
                 self.cleaned_data.get(u'confirm_email')):
             raise ValidationError(

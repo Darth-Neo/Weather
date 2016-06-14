@@ -1,3 +1,5 @@
+*.db
+Weather.db
 *.pyc
 Weather/*.pyc
 temperature/*.pyc

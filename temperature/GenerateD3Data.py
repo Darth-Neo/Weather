@@ -153,8 +153,8 @@ class GenerateD3Data(object):
                     logger.debug(u"-->%s Max \t%3.2f\t%3.2f\t%3.2f" % (k, maxF, maxH, maxB))
                     logger.debug(u"            Min \t%3.2f\t%3.2f\t%3.2f" % (minF, minH, minB))
 
-                except Exception:
-                    logger.warn(u"%s" % (Exception.message))
+                except Exception, msg:
+                    logger.warn(u"%s" % msg)
 
             logger.debug(u"===%s Max \t%3.2f\t%3.2f\t%3.2f" % (k, maxF, maxH, maxB))
             logger.debug(u"            Min \t%3.2f\t%3.2f\t%3.2f" % (minF, minH, minB))

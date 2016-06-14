@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 import os
 import sqlite3
-from Logger import *
 
+from Logger import *
 logger = setupLogging(__file__)
 logger.setLevel(DEBUG)
 
-months = ["Jan%", "Feb%", "Mar%", "Apr%", "May%", "Jun%", "Jul%", "Aug%", "Sep%", "Oct%", "Nov%", "Dec%"]
+months = [u"Jan%", u"Feb%", u"Mar%", u"Apr%", u"May%", u"Jun%", u"Jul%", u"Aug%", u"Sep%", u"Oct%", u"Nov%", u"Dec%"]
+
 
 def countReadings(conn):
 
@@ -14,21 +15,21 @@ def countReadings(conn):
     n = 0
 
     for month in months:
-        t = ("%s" % month, )
-        cnt = "select count(*) from temperature_temperature where ReadingDateTime like ?"
+        t = (u"%s" % month, )
+        cnt = u"select count(*) from temperature_temperature where ReadingDateTime like ?"
 
         c.execute(cnt, t)
 
-        logger.info("Month[%2d]: %s\t%s" % (n, month[:-1], c.fetchone()))
+        logger.info(u"Month[%2d]: %s\t%s" % (n, month[:-1], c.fetchone()))
         n += 1
 
 
 def trimReadings(conn, month):
-    logger.info("Trim %s%s" % (month[:-1], os.linesep))
+    logger.info(u"Trim %s%s" % (month[:-1], os.linesep))
 
     c = conn.cursor()
 
-    t = ("%s" % month, )
+    t = (u"%s" % month, )
 
     trim = u"delete from temperature_temperature where ReadingDateTime like ?"
 
@@ -38,7 +39,7 @@ if __name__ == u"__main__":
 
     conn_str = u".%sWeather.db" % os.sep
 
-    logger.info("Using : %s" % conn_str)
+    logger.info(u"Using : %s" % conn_str)
     tm = months[9] 
 
     with sqlite3.connect(conn_str) as conn:

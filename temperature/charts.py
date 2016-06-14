@@ -71,7 +71,8 @@ def simple(request):
             strDT = wl[0][:-1]
             strDT = strDT[0:6] + u" 2015" + strDT[7:]
             dt = datetime.strptime(strDT, u'%b %d %Y %I:%M %p')
-        except:
+
+        except Exception, msg:
             try:
                 # 2015-02-07 23:00:00
                 dt = datetime.strptime(strDT, u'%Y-%b-%d %I:%M:%S')
