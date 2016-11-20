@@ -18,9 +18,11 @@
        <th width="25%">
             <h3>Humidity</h3>
        </th>
+        <!--
         <th width="25%">
             <h3>Barometer</h3>
        </th>
+       -->
     </tr>
     <tr>
         <td>
@@ -29,9 +31,11 @@
         <td>
             <a class="small" href="{{ temperature.get_absolute_url }}/{{ maxHumidityID }}/"> {{ maxHumidity }} </a>
         </td>
+        <!--
         <td>
             <a class="small" href="{{ temperature.get_absolute_url }}/{{ maxBarometerID }}/"> {{ maxBarometer }} </a>
         </td>
+        -->
     </tr>
     <tr>
         <td>
@@ -40,9 +44,11 @@
         <td>
             <a class="small" href="{{ temperature.get_absolute_url }}/{{ minHumidityID }}/"> {{ minHumidity }} </a>
         </td>
+        <!--
         <td>
             <a class="small" href="{{ temperature.get_absolute_url }}/{{ minBarometerID }}/"> {{ minBarometer }} </a>
         </td>
+        -->
     </tr>
     <tr>
         <table class="table">
@@ -84,7 +90,9 @@
                             <th>Reading Time</th>
                             <th>Temp (F)</th>
                             <th>Humidity</th>
+                            <!--
                             <th>Barometer</th>
+                            -->
                             <th>Action</th>
                             <th>Action</th>
                         </tr>
@@ -99,9 +107,11 @@
                             <td>
                                 <a class="small" href="{{ temperature.get_absolute_url }}"> {{ temperature.Humidity }} </a>
                             </td>
+                            <!--
                             <td>
                                 <a class="small" href="{{ temperature.get_absolute_url }}"> {{ temperature.Barometer }} </a>
                             </td>
+                            -->
                             <td>
                                 <a class="small" href="{% url 'temperature_edit' pk=temperature.id %}"> edit </a>
                             </td>

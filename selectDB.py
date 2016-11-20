@@ -37,7 +37,7 @@ def fixReadings():
 
     del1 = u"delete from temperature_temperature where ReadingDateTime like '7%'"
 
-    sel1 = u"select ReadingDateTime, TempF, Humidity, Barometer from temperature_temperature"
+    sel1 = u"select ReadingDateTime, TempF, Humidity from temperature_temperature"
 
     upd1 = u"update temperature_temperature set ReadingDateTime = printf('2015 %s', ReadingDateTime);"
     upd2 = u"update temperature_temperature set ReadingDateTime = printf('2016 %s', ReadingDateTime)  where id > 49421;"
@@ -52,24 +52,24 @@ def fixReadings():
             if row[0][-1:] == os.linesep:
                 row[0] = row[0][:-1]
 
-            logger.debug(u"ReadingDateTime = %s\tTempf = %s\tHumidity = %s\tBarometer = %s" %
-                         (row[0], row[1], row[2], row[3]))
+            logger.debug(u"ReadingDateTime = %s\tTempf = %s\tHumidity = %s" %
+                         (row[0], row[1], row[2]))
 
 
 def printReadings(conn):
-    sel = u"select ReadingDateTime, TempF, Humidity, Barometer from temperature_temperature order by id desc limit 50"
+    sel = u"select ReadingDateTime, TempF, Humidity from temperature_temperature order by id desc limit 50"
 
     cursor = conn.execute(sel)
 
     for row in cursor:
-        logger.debug(u"ReadingDateTime = %s\tTempf = %s\tHumidity = %s\tBarometer = %s" %
-                     (row[0], row[1], row[2], row[3]))
+        logger.debug(u"ReadingDateTime = %s\tTempf = %s\tHumidity = %s" %
+                     (row[0], row[1], row[2]))
 
 
 if __name__ == u"__main__":
     home = os.getcwd()
 
-    conn_str = home + os.sep + u"Weather.db"
+    conn_str = home + os.sep + u"Weather.db.sav"
     conn = sqlite3.connect(conn_str)
 
     print(u"Opened database successfully")

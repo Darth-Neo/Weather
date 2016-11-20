@@ -1,4 +1,4 @@
-#! /bin/python
+#!/usr/bin/env python
 #
 # __author__ = 'james.morris'
 #
@@ -21,7 +21,7 @@ logger.setLevel(DEBUG)
 
 
 def existsFile(file_path):
-    print os.getcwd()
+    print(os.getcwd())
 
     if os.path.isfile(file_path):
         return True
@@ -40,7 +40,12 @@ def getReadings(con=None):
         else:
             logger.error(u"File not found - %s" % file_path)
 
-    sel = u"select ReadingDateTime, TempF, Humidity, Barometer \
+
+    # sel = u"select ReadingDateTime, TempF, Humidity, Barometer \
+    #    from temperature_temperature order by id desc"
+
+
+    sel = u"select ReadingDateTime, TempF, Humidity \
         from temperature_temperature order by id desc"
 
     cursor = conn.execute(sel)
@@ -72,7 +77,7 @@ def simple(request):
             strDT = strDT[0:6] + u" 2015" + strDT[7:]
             dt = datetime.strptime(strDT, u'%b %d %Y %I:%M %p')
 
-        except Exception, msg:
+        except Exception:
             try:
                 # 2015-02-07 23:00:00
                 dt = datetime.strptime(strDT, u'%Y-%b-%d %I:%M:%S')
@@ -91,12 +96,13 @@ def simple(request):
             elif isinstance(wl[3], str) or isinstance(wl[3], unicode):
                 br = float(wl[3]) / 100.0
 
-            logger.info(u"%s\t%d\t%d\t%d" % (dt, tf, hm, br))
+            # logger.info(u"%s\t%d\t%d\t%d" % (dt, tf, hm, br))
+            logger.info(u"%s\t%d\t%d\t%d" % (dt, tf, hm))
 
             x.append(dt)
             y.append(tf)
             z.append(hm)
-            w.append(br)
+            # w.append(br)
         except Exception, msg:
             logger.debug(u"%s" % msg)
 
@@ -107,6 +113,7 @@ def simple(request):
         ax.plot(x, y, u"g^")
         ax.plot(x, z, u"ro")
         ax.plot(x, z, u"ro")
+        # ax.plot(x, w, u"ro")
         ax.plot(x, w, u"ro")
 
         ax.xaxis.set_major_formatter(DateFormatter(u'%b %d %Y %I:%M %p'))

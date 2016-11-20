@@ -97,15 +97,13 @@ class GenerateD3Data(object):
 
         # ----- Note: Must be lower case or javascript will fail ------
         with open(self.dataFileOutput, u"w") as f:
-            f.write("date\tTemperature-H\tHumidity-H\tBarometer-H\tTemperature-L\tHumidity-L\tBarometer-L%s"
-                    % os.linesep)
+            f.write("date\tTemperature-H\tHumidity-H\tTemperature-L\tHumidity-L%s"  % os.linesep)
 
             for k, v in sorted_adt:
+                logger.debug(u"key[%s] = %s" % (k, v))
                 v2 = GenerateD3Data._fixReading(v[2])
-                v5 = GenerateD3Data._fixReading(v[5])
 
-                vRow = "%s\t%3.2f\t%3.2f\t%3.2f\t%3.2f\t%3.2f\t%3.2f%s" % (k, v[0], v[1], v2,
-                                                                           v[3], v[4], v5, os.linesep)
+                vRow = "%s\t%3.2f\t%3.2f\t%3.2f\t%3.2f%s" % (k, v[0], v[1], v2, v[3], os.linesep)
 
                 f.write(vRow)
                 logger.debug(u"vRow : %s" % vRow)
@@ -119,11 +117,9 @@ class GenerateD3Data(object):
 
             minF = 1000.0
             minH = 1000.0
-            minB = 1000.0
 
             maxF = 0.0
             maxH = 0.0
-            maxB = 0.0
 
             for f, h, b in v:
                 try:
@@ -145,27 +141,20 @@ class GenerateD3Data(object):
                     if fh < minH:
                         minH = fh
 
-                    if fb > maxB:
-                        maxB = fb
-                    if fb < minB:
-                        minB = fb
-
-                    logger.debug(u"-->%s Max \t%3.2f\t%3.2f\t%3.2f" % (k, maxF, maxH, maxB))
-                    logger.debug(u"            Min \t%3.2f\t%3.2f\t%3.2f" % (minF, minH, minB))
+                    logger.debug(u"-->%s Max \t%3.2f\t%3.2f" % (k, maxF, maxH))
+                    logger.debug(u"            Min \t%3.2f\t%3.2f" % (minF, minH))
 
                 except Exception, msg:
                     logger.warn(u"%s" % msg)
 
-            logger.debug(u"===%s Max \t%3.2f\t%3.2f\t%3.2f" % (k, maxF, maxH, maxB))
-            logger.debug(u"            Min \t%3.2f\t%3.2f\t%3.2f" % (minF, minH, minB))
+            logger.debug(u"===%s Max \t%3.2f\t%3.2f" % (k, maxF, maxH))
+            logger.debug(u"            Min \t%3.2f\t%3.2f" % (minF, minH))
 
             nl = list()
             nl.append(maxF)
             nl.append(maxH)
-            nl.append(maxB)
             nl.append(minF)
             nl.append(minH)
-            nl.append(minB)
             self.adt[k] = nl
 
     def generateD3Data(self):
