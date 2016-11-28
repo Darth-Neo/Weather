@@ -5,7 +5,7 @@ import sqlite3
 
 from Logger import *
 logger = setupLogging(__file__)
-logger.setLevel(INFO)
+logger.setLevel(DEBUG)
 
 months = [u"%Dec%", u"%Nov%", u"%Oct%", u"%Sep%", u"%Jul%",
           u"%Jun%", u"%May%", u"%Apr%", u"%Mar%", u"%Feb%", u"%Jan%",]
@@ -15,13 +15,13 @@ def trimReadings(conn, tcy):
 
     c = conn.cursor()
 
-    t = u"%d%%%s" % (tcy[0], tcy[1])
+    t = u"%d %s" % (tcy[0], tcy[1])
 
     logger.info(u"%s" % t)
 
-    trim = u"delete from temperature_temperature where ReadingDateTime like ?"
+    trim = u"delete from temperature_temperature where ReadingDateTime like '{}'".format(t)
 
-    c.execute(trim, t)
+    c.execute(trim)
 
 
 if __name__ == u"__main__":
