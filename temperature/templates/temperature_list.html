@@ -1,163 +1,129 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<iframe src="static/temp.html" width="2400" height="600"></iframe>
-
+<!--
 <h1 > Temperature Readings: {{ readings }}  </h1>
 
 <h2>
-    <a href="{% url "temperature_new" %}" class="btn btn-info">Add Temperature</a>
+    <a href="{% url 'temperature_new' %}" class="btn btn-info">Add Temperature</a>
 </h2>
+-->
+<div class="container-fluid">
 
-<table class="table table-striped" width="90%">
-    <tr>
-       <th width="25%">
-            <h3>Temperature</h3>
-       </th>
-       <th width="25%">
-            <h3>Humidity</h3>
-       </th>
-        <!--
-        <th width="25%">
-            <h3>Barometer</h3>
-       </th>
-       -->
-    </tr>
-    <tr>
-        <td>
-            <a class="small" href="{{ temperature.get_absolute_url }}/{{ maxTemperatureID }}/"> {{ maxTemperature }} </a>
-        </td>
-        <td>
-            <a class="small" href="{{ temperature.get_absolute_url }}/{{ maxHumidityID }}/"> {{ maxHumidity }} </a>
-        </td>
-        <!--
-        <td>
-            <a class="small" href="{{ temperature.get_absolute_url }}/{{ maxBarometerID }}/"> {{ maxBarometer }} </a>
-        </td>
-        -->
-    </tr>
-    <tr>
-        <td>
-            <a class="small" href="{{ temperature.get_absolute_url }}/{{ minTemperatureID }}/"> {{ minTemperature }} </a>
-        </td>
-        <td>
-            <a class="small" href="{{ temperature.get_absolute_url }}/{{ minHumidityID }}/"> {{ minHumidity }} </a>
-        </td>
-        <!--
-        <td>
-            <a class="small" href="{{ temperature.get_absolute_url }}/{{ minBarometerID }}/"> {{ minBarometer }} </a>
-        </td>
-        -->
-    </tr>
-    <tr>
-        <table class="table">
-            <tr>
-                <td>
-                    {% if is_paginated %}
-                        <ul class='pagination pagination-sm'>
-                            <li>
-                                <a href="{% url "temperature_list" %}?page=1"> << </a>
-                            </li>
+    <h2>Weather</h2>
+    <ul class="nav nav-tabs">
+        <li><a data-toggle="tab" href="#graph"><h3>Home</h3></a></li>
+        <li><a data-toggle="tab" href="#MinMax"><h3>Highs and Lows</h3></a></li>
+        <li class="active"><a data-toggle="tab" href="#Readings"><h3>Readings</h3></a></li>
+    </ul>
 
-                            {% if page_obj.has_previous %}
-                                <li class="previous">
-                                    <a href="{% url "temperature_list" %}?page={{page_obj.previous_page_number}}"> < </a>
-                                </li>
-                            {% endif %}
+    <div class="tab-content">
+        <div id="graph" class="tab-pane fade in active col-lg-1">
+            <iframe src="static/temp.html" width="1800" height="600"></iframe>
+        </div>
 
-                            <li>
-                                 <span> Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} </span>
-                            </li>
+        <div id="MinMax" class="tab-pane fade col-lg-4">
+            <table class="table table-striped">
+                <tr>
+                    <th colspan="2" class="text-center">Temperature</th>
+                    <th colspan="2" class="text-center">Humidity</th>
+                </tr>
+                <tr>
+                    <td>
+                        <a class="text-center small" href="{{ temperature.get_absolute_url }}/{{ maxTemperatureID }}/"> {{ maxTemperature }} </a>
+                    </td>
+                    <td>
+                        <a class="text-center small" href="{{ temperature.get_absolute_url }}/{{ maxHumidityID }}/"> {{ maxHumidity }} </a>
+                    </td>
+                    <td>
+                        <a class="text-center small" href="{{ temperature.get_absolute_url }}/{{ minTemperatureID }}/"> {{ minTemperature }} </a>
+                    </td>
+                    <td>
+                        <a class="text-center small" href="{{ temperature.get_absolute_url }}/{{ minHumidityID }}/"> {{ minHumidity }} </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
-                            {% if page_obj.has_next %}
-                                <li class="next">
-                                    <a href="{% url "temperature_list" %}?page={{ page_obj.next_page_number }}"> > </a>
-                                </li>
-                            {% endif %}
+        <div id="Readings" class="tab-pane fade col-md-4">
+            {% if is_paginated %}
+                <ul class='pagination pagination-sm'>
+                    <li>
+                        <a href="{% url 'temperature_list' %}?page=1"> << </a>
+                    </li>
 
-                            <li>
-                                <a href="{% url "temperature_list" %}?page={{ page_obj.paginator.num_pages }}"> >> </a>
-                            </li>
-                        </ul>
+                    {% if page_obj.has_previous %}
+                        <li class="previous">
+                            <a href="{% url 'temperature_list' %}?page={{page_obj.previous_page_number}}"> < </a>
+                        </li>
                     {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <table class='table table-striped'>
-                        <tr>
-                            <th>Reading Time</th>
-                            <th>Temp (F)</th>
-                            <th>Humidity</th>
-                            <!--
-                            <th>Barometer</th>
-                            -->
-                            <th>Action</th>
-                            <th>Action</th>
-                        </tr>
-                        {% for temperature in object_list %}
-                        <tr>
-                            <td>
-                                <a class="small" href="{{ temperature.get_absolute_url }}"> {{ temperature.ReadingDateTime }} </a>
-                            </td>
-                            <td>
-                                <a class="small" href="{{ temperature.get_absolute_url }}"> {{ temperature.TempF }} </a>
-                            </td>
-                            <td>
-                                <a class="small" href="{{ temperature.get_absolute_url }}"> {{ temperature.Humidity }} </a>
-                            </td>
-                            <!--
-                            <td>
-                                <a class="small" href="{{ temperature.get_absolute_url }}"> {{ temperature.Barometer }} </a>
-                            </td>
-                            -->
-                            <td>
-                                <a class="small" href="{% url 'temperature_edit' pk=temperature.id %}"> edit </a>
-                            </td>
-                            <td>
-                                <a class="small" href="{% url 'temperature_delete' pk=temperature.id %}"> delete </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {% if is_paginated %}
-                        <ul class='pagination pagination-sm'>
-                            <li>
-                                <a href="{% url "temperature_list" %}?page=1"> << </a>
-                            </li>
 
-                            {% if page_obj.has_previous %}
-                                <li class="previous">
-                                    <a href="{% url "temperature_list" %}?page={{page_obj.previous_page_number}}"> < </a>
-                                </li>
-                            {% endif %}
+                    <li>
+                         <span> Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} </span>
+                    </li>
 
-                            <li>
-                                 <span> Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} </span>
-                            </li>
-
-                            {% if page_obj.has_next %}
-                                <li class="next">
-                                    <a href="{% url "temperature_list" %}?page={{ page_obj.next_page_number }}"> > </a>
-                                </li>
-                            {% endif %}
-
-                            <li>
-                                <a href="{% url "temperature_list" %}?page={{ page_obj.paginator.num_pages }}"> >> </a>
-                            </li>
-                       </ul>
+                    {% if page_obj.has_next %}
+                        <li class="next">
+                            <a href="{% url 'temperature_list' %}?page={{ page_obj.next_page_number }}"> > </a>
+                        </li>
                     {% endif %}
-                </td>
-            </tr>
-         </table>
-    </tr>
-</table>
 
+                    <li>
+                        <a href="{% url 'temperature_list' %}?page={{ page_obj.paginator.num_pages }}"> >> </a>
+                    </li>
+               </ul>
+            {% endif %}
 
+            <table class='table table-striped table-hover'>
+                <tr>
+                    <th>Reading Time</th>
+                    <th>Temp (F)</th>
+                    <th>Humidity</th>
+                </tr>
+
+                {% for temperature in object_list %}
+                    <tr>
+                        <td>
+                            <a class="text-center small" href="{{ temperature.get_absolute_url }}"> {{ temperature.ReadingDateTime }} </a>
+                        </td>
+                        <td>
+                            <a class="text-center small" href="{{ temperature.get_absolute_url }}"> {{ temperature.TempF }} </a>
+                        </td>
+                        <td>
+                            <a class="text-center small" href="{{ temperature.get_absolute_url }}"> {{ temperature.Humidity }} </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+            {% if is_paginated %}
+                <ul class='pagination pagination-sm'>
+                    <li>
+                        <a href="{% url 'temperature_list' %}?page=1"> << </a>
+                    </li>
+
+                    {% if page_obj.has_previous %}
+                        <li class="previous">
+                            <a href="{% url 'temperature_list' %}?page={{page_obj.previous_page_number}}"> < </a>
+                        </li>
+                    {% endif %}
+
+                    <li>
+                         <span> Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} </span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <li class="next">
+                            <a href="{% url 'temperature_list' %}?page={{ page_obj.next_page_number }}"> > </a>
+                        </li>
+                    {% endif %}
+
+                    <li>
+                        <a href="{% url 'temperature_list' %}?page={{ page_obj.paginator.num_pages }}"> >> </a>
+                    </li>
+               </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}
-

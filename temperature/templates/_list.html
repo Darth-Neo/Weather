@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<a href="{% url 'aprs_messages_list' %}">APRS Messages</a>
+
 {% for temperature in temperatures %}
     {# Each "temperature" is a Temperature model object. #}
     {{ temperature.TempF }}<br />

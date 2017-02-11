@@ -28,7 +28,7 @@ class ListTemperatureView(ListView):
 
     model = Temperature
     template_name = u'temperature_list.html'
-    paginate_by = 25
+    paginate_by = 20
     object_list = None
 
     def get_context_data(self, **kwargs):
@@ -36,6 +36,7 @@ class ListTemperatureView(ListView):
         context = super(ListTemperatureView, self).get_context_data(**kwargs)
 
         context[u'readings'] = len(self.object_list)
+
         """
         min_TempF = Temperature.objects.all().aggregate(Min(u'TempF'))
         temperature = Temperature.objects.all().filter(TempF = min_TempF)
@@ -241,7 +242,7 @@ class CreateTemperatureView(CreateView):
 class UpdateTemperatureView(UpdateView):
 
     model = Temperature
-    fields = "__all__"
+    fields = u"__all__"
     
     template_name = u'temperature_edit.html'
 

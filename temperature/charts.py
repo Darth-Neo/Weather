@@ -28,7 +28,6 @@ def existsFile(file_path):
     else:
         return False
 
-
 def getReadings(con=None):
 
     if con is None:

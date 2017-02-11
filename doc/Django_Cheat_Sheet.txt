@@ -1,0 +1,31 @@
+
+
+django-admin startproject mysite
+
+python manage.py startapp search
+
+python manage.py runserver
+
+python manage.py migrate
+
+
+# Shows model changes
+python manage.py sqlmigrate polls 0001
+
+# Migrates models + instantiate the DB
+python manage.py makemigrations search
+
+# DB Shell
+python manage.py shell
+import django
+django.setup()
+from Search.models import Query, Choice
+Query.objects.all()
+
+
+# Create User
+python manage.py createsuperuser
+
+# URL, which now requires a login
+http://127.0.0.1:8000/admin/
+

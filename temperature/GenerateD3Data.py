@@ -33,7 +33,8 @@ class GenerateD3Data(object):
         self.dl = dict()
 
         if pathDir is None:
-            pathDir = u"/home/james.morris/PythonDev/Django/Weather"
+            home = os.getenv("$HOME")
+            pathDir = u"/home/james/PythonDev/Weather/Weather"
 
         db_file = u"Weather.db"
         data_file = u"data.tsv.run"
