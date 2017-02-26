@@ -37,68 +37,26 @@ class ListTemperatureView(ListView):
 
         context[u'readings'] = len(self.object_list)
 
-        """
-        min_TempF = Temperature.objects.all().aggregate(Min(u'TempF'))
-        temperature = Temperature.objects.all().filter(TempF = min_TempF)
-        minReadingDateTime = temperature.ReadingDateTime
+        #
+        # Termperature
+        maxTemperature, maxReadingDateTime, maxTemperatureID = self.get_maxTemperature(self.object_list)
+        context[u'maxTemperature'] = u"%s on %s" % (maxTemperature, maxReadingDateTime)
+        context[u'maxTemperatureID'] = maxTemperatureID
 
-        Temperature.objects.filter(ReadingDateTime='Sales').values('dept_name').annotate(Count('employee'))
-        Temperature.objects.filter(dept_name='Sales').aggregate(Count('employee'))
-        """
+        minTemperature, minReadingDateTime, minTemperatureID = self.get_minTemperature(self.object_list)
+        context[u'minTemperature'] = u"%s on %s" % (minTemperature, minReadingDateTime)
+        context[u'minTemperatureID'] = minTemperatureID
 
-        if False:
-            minTemperature = Temperature.objects.all().aggregate(Min(u'TempF'))
-            temperature = Temperature.objects.get(TempF=minTemperature)
-            minReadingDateTime = temperature.ReadingDateTime
-            context[u'minTemperature'] = u"%s on %s" % (minTemperature, minReadingDateTime)
-            context[u'minTemperatureID'] = temperature.ID
+        #
+        # Humidity
+        #
+        maxHumidity, maxReadingDateTime, maxHumidityID = self.get_maxHumidity(self.object_list)
+        context[u'maxHumidity'] = u"%s on %s" % (maxHumidity, maxReadingDateTime)
+        context[u'maxHumidityID'] = maxHumidityID
 
-            maxTemperature = Temperature.objects.all().aggregate(Max(u'TempF'))
-            temperature = Temperature.objects.all().filter(TempF=maxTemperature)
-            maxReadingDateTime = temperature.ReadingDateTime
-            context[u'maxTemperature'] = u"%s on %s" % (maxTemperature, maxReadingDateTime)
-            context[u'maxTemperatureID'] = temperature.ID
-
-            max_TempF = Temperature.objects.all().aggregate(Max(u'TempF'))
-            min_TempF = Temperature.objects.all().aggregate(Min(u'TempF'))
-
-            max_Humidity = Temperature.objects.all().aggregate(Max(u'Humidity'))
-            min_Humidity = Temperature.objects.all().aggregate(Min(u'Humidity'))
-
-            max_Barometer = Temperature.objects.all().aggregate(Max(u'Barometer'))
-            min_Barometer = Temperature.objects.all().aggregate(Min(u'Barometer'))
-        else:
-            #
-            # Termperature
-            maxTemperature, maxReadingDateTime, maxTemperatureID = self.get_maxTemperature(self.object_list)
-            context[u'maxTemperature'] = u"%s on %s" % (maxTemperature, maxReadingDateTime)
-            context[u'maxTemperatureID'] = maxTemperatureID
-
-            minTemperature, minReadingDateTime, minTemperatureID = self.get_minTemperature(self.object_list)
-            context[u'minTemperature'] = u"%s on %s" % (minTemperature, minReadingDateTime)
-            context[u'minTemperatureID'] = minTemperatureID
-
-            #
-            # Humidity
-            #
-            maxHumidity, maxReadingDateTime, maxHumidityID = self.get_maxHumidity(self.object_list)
-            context[u'maxHumidity'] = u"%s on %s" % (maxHumidity, maxReadingDateTime)
-            context[u'maxHumidityID'] = maxHumidityID
-
-            minHumidity, minReadingDateTime, minHumidityID = self.get_minHumidity(self.object_list)
-            context[u'minHumidity'] = u"%s on %s" % (minHumidity, minReadingDateTime)
-            context[u'minHumidityID'] = minHumidityID
-
-            #
-            # Barometer
-            #
-            maxBarometer, maxReadingDateTime, maxBarometerID = self.get_maxBarometer(self.object_list)
-            context[u'maxBarometer'] = u"%s on %s" % (maxBarometer, maxReadingDateTime)
-            context[u'maxBarometerID'] = maxBarometerID
-
-            minBarometer, minReadingDateTime, minBarometerID = self.get_minBarometer(self.object_list)
-            context[u'minBarometer'] = u"%s on %s" % (minBarometer, minReadingDateTime)
-            context[u'minBarometerID'] = minBarometerID
+        minHumidity, minReadingDateTime, minHumidityID = self.get_minHumidity(self.object_list)
+        context[u'minHumidity'] = u"%s on %s" % (minHumidity, minReadingDateTime)
+        context[u'minHumidityID'] = minHumidityID
 
         self.object_list = context[u'object_list']
 
@@ -174,53 +132,6 @@ class ListTemperatureView(ListView):
                 maxHumidityID = x.id
 
         return maxHumidity, maxReadingDateTime, maxHumidityID
-
-    #
-    # Barometer
-    #
-    def get_minBarometer(self, object_list):
-
-        minBarometer = 1000.0
-        minReadingDateTime = None
-        minBarometerID = None
-
-        for x in object_list:
-
-            try:
-                barometer = float(x.Barometer)
-            except:
-                continue
-
-            logger.debug(u"Max Barometer : %d - %d" % (barometer, minBarometer))
-
-            if barometer < minBarometer:
-                minBarometer = barometer
-                minReadingDateTime = x.ReadingDateTime
-                minBarometerID = x.id
-
-        return minBarometer, minReadingDateTime, minBarometerID
-
-    def get_maxBarometer(self, object_list):
-
-        maxBarometer = 0.0
-        maxReadingDateTime = None
-        maxBarometerID = None
-
-        for x in object_list:
-            try:
-                barometer = float(x.Barometer)
-            except:
-                continue
-
-            logger.debug(u"Max Barometer : %d - %d" % (barometer, maxBarometer))
-
-            if barometer > maxBarometer:
-                maxBarometer = barometer
-                maxReadingDateTime = x.ReadingDateTime
-                maxBarometerID = x.id
-
-        return maxBarometer, maxReadingDateTime, maxBarometerID
-
 
 class CreateTemperatureView(CreateView):
 

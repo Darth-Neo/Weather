@@ -1,5 +1,5 @@
 #!/usr/bin/sh
-export SDEV_HOME=/home/james/PythonDev/Django/Weather
+export SDEV_HOME=/home/james/PythonDev/Weather/Weather
 export WEATHER_HOME=/home/pi/rpi
 
 cd $SDEV_HOME

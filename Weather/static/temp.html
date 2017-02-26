@@ -89,7 +89,6 @@ d3.tsv("data.tsv.run", function(error, data) {
       name: name,
       values: data.map(function(d) {return {date: d.date,   temperature: +d[name],
                                                             humidity: +d[name]};
-                                                            // barometer: +d[name]};
       })
     };
   });
@@ -153,8 +152,5 @@ d3.tsv("data.tsv.run", function(error, data) {
   )
 
 });
-
-
-
 
 </script>
