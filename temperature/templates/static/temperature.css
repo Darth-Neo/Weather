@@ -1,0 +1,47 @@
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    table-striped;
+    table-hover;
+    table-bordered;
+    table-condensed;
+}
+
+td, th {
+    border: 1px solid black;
+    text-align: left;
+    padding: 8px;
+}
+
+th {
+	background-color: #228B22;
+	color: white;
+}
+
+#graph {
+    class: tab-pane fade in active
+}
+
+.a {
+    line-height: 0.8;
+}
+
+h1 {
+    font-size: 40px;
+}
+
+h2 {
+    font-size: 30px;
+    text-align: center;
+}
+
+h4 {
+    text-align: center;
+}
+
+p {
+    font-size: 14px;
+}
+
