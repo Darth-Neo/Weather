@@ -1,11 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<h1>{{ temperature.id }}</h1>
-
-<p>Reading DateTime: {{ temperature.ReadingDateTime }}</p>
-
-<a href="{% url 'temperature_list' %}">back to list</a>
-
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-4">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <h4> Reading DateTime </h4>
+                            </th>
+                            <th>
+                                <h4> Temp (F) </h4>
+                            </th>
+                            <th>
+                                <h4> Humidity </h4>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                {{ temperature.ReadingDateTime }}
+                            </td>
+                            <td>
+                                {{ temperature.TempF }}
+                            </td>
+                            <td>
+                                {{ temperature.Humidity }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <a href="{% url 'temperature_list' %}">
+                    <button>
+                        Back to list
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

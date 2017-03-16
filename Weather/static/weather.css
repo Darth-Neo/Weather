@@ -1,5 +1,5 @@
 
-table {
+#table, table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
@@ -11,12 +11,13 @@ table {
 
 td, th {
     border: 1px solid black;
-    text-align: left;
+    text-align: center;
     padding: 8px;
 }
 
 th {
-    line-height: 1.0;
+	background-color: #228B22;
+	color: white;
 }
 
 #graph {

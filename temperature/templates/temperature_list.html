@@ -15,11 +15,11 @@
     <div class="content-fluid">
         <div class="row">
             <div id="graph" class="col-lg-12">
-                <iframe src="static/temp.html" width="1800" height="600">Graph</iframe>
+                <iframe src="static/temp.html" width="1800" height="600" class="center">Graph</iframe>
             </div>
         </div>
         <div class="row">
-            <div id="MinMax" class="col-lg-6">
+            <div id="MinMax" class="col-lg-12">
                 <table class="table table-striped">
                     <tr>
                         <th colspan="2" class="text-center"><h2>Temperature</h2></th>
@@ -27,23 +27,23 @@
                     </tr>
                     <tr>
                         <td>
-                            <a class="text-center small" href="{{ temperature.get_absolute_url }}/{{ maxTemperatureID }}/"><h4> {{ maxTemperature }}</h4> </a>
+                            <a class="text-center small" href="{{ temperature.get_absolute_url }}/temperature/edit/{{ maxTemperatureID }}/"><h4> {{ maxTemperature }}</h4> </a>
                         </td>
                         <td>
-                            <a class="text-center small" href="{{ temperature.get_absolute_url }}/{{ maxHumidityID }}/"><h4> {{ maxHumidity }}</h4> </a>
+                            <a class="text-center small" href="{{ temperature.get_absolute_url }}/temperature/edit/{{ maxHumidityID }}/"><h4> {{ maxHumidity }}</h4> </a>
                         </td>
                         <td>
-                            <a class="text-center small" href="{{ temperature.get_absolute_url }}/{{ minTemperatureID }}/"><h4> {{ minTemperature }}</h4> </a>
+                            <a class="text-center small" href="{{ temperature.get_absolute_url }}/temperature/edit/{{ minTemperatureID }}/"><h4> {{ minTemperature }}</h4> </a>
                         </td>
                         <td>
-                            <a class="text-center small" href="{{ temperature.get_absolute_url }}/{{ minHumidityID }}/"><h4> {{ minHumidity }}</h4> </a>
+                            <a class="text-center small" href="{{ temperature.get_absolute_url }}/temperature/edit/{{ minHumidityID }}/"><h4> {{ minHumidity }}</h4> </a>
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
         <div class="row">
-            <div id="Readings" class="text-center col-lg-6">
+            <div id="Readings" class="text-center col-lg-12">
                 {% if is_paginated %}
                     <ul class='pagination pagination-sm'>
                         <li>

@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 args=("$@")
-export DIR="/home/james/PythonDev/Django"
+export DIR="/home/james/PythonDev/Weather"
 source $DIR/bin/activate
 
 # test
