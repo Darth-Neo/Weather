@@ -3,7 +3,7 @@ import os.path
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-DEBUG_TOOLBAR_PATCH_SETTINGS = True
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.versions.VersionsPanel',
@@ -21,7 +21,7 @@ DEBUG_TOOLBAR_PANELS = [
 ]
 
 ADMINS = (
-    ('pi', 'morrisspid.james@hotmail.com'),
+    ('james', 'morrisspid.james@hotmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -40,7 +40,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['localhost', '0.0.0.0', 'sdevjmmlinux']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'sdevjmmlinux']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -131,13 +131,7 @@ ROOT_URLCONF = 'Weather.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'Weather.wsgi.application'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    # "/home/james/PythonDev/Django/Weather/temperature/templates",
-    # "/home/james/PythonDev/Django/Weather/aprs_message/templates",
-)
+TEMPLATE_DIRS = ["/home/james/PythonDev/Weather/Weather/temperature/templates/", ]
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -151,7 +145,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'temperature',
-    'debug_toolbar',
+    # 'debug_toolbar',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -175,3 +169,21 @@ LOGGING = {
         },
     },
 }
+
+SETTINGS_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+TEMPLATES = [
+{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': [os.path.join(SETTINGS_PATH, 'templates')],
+    'APP_DIRS': True,
+    'OPTIONS': {
+        'context_processors': [
+            'django.template.context_processors.debug',
+            'django.template.context_processors.request',
+            'django.contrib.auth.context_processors.auth',
+            'django.contrib.messages.context_processors.messages',
+        ],
+    },
+}]

@@ -1,49 +1,50 @@
 {% extends "base.html" %}
-
 {% block content %}
-<!--
-<h1 > Temperature Readings: {{ readings }}  </h1>
-
-<h2>
-    <a href="{% url 'temperature_new' %}" class="btn btn-info">Add Temperature</a>
-</h2>
--->
-<div class="container-fluid">
-
-    <h2>Clermont Weather</h2>
-
-    <div class="content-fluid">
+    <div class="container-fluid">
         <div class="row">
-            <div id="graph" class="col-lg-12">
-                <iframe src="static/temp.html" width="1800" height="600" class="center">Graph</iframe>
-            </div>
+            <h2>Clermont Weather</h2>
         </div>
         <div class="row">
-            <div id="MinMax" class="col-lg-12">
+            <iframe src="/static/temp.html" width="1800" height="600" class="center">Graph</iframe>
+        </div>
+        <div class="row">
+            <div id="MinMax" class="col-sm-8">
                 <table class="table table-striped">
-                    <tr>
-                        <th colspan="2" class="text-center"><h2>Temperature</h2></th>
-                        <th colspan="2" class="text-center"><h2>Humidity</h2></th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a class="text-center small" href="{{ temperature.get_absolute_url }}/temperature/edit/{{ maxTemperatureID }}/"><h4> {{ maxTemperature }}</h4> </a>
-                        </td>
-                        <td>
-                            <a class="text-center small" href="{{ temperature.get_absolute_url }}/temperature/edit/{{ maxHumidityID }}/"><h4> {{ maxHumidity }}</h4> </a>
-                        </td>
-                        <td>
-                            <a class="text-center small" href="{{ temperature.get_absolute_url }}/temperature/edit/{{ minTemperatureID }}/"><h4> {{ minTemperature }}</h4> </a>
-                        </td>
-                        <td>
-                            <a class="text-center small" href="{{ temperature.get_absolute_url }}/temperature/edit/{{ minHumidityID }}/"><h4> {{ minHumidity }}</h4> </a>
-                        </td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th colspan="2" class="text-center"><h4>Temperature</h4></th>
+                            <th colspan="2" class="text-center"><h4>Humidity</h4></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a class="text-center small"
+                                   href="{{ temperature.get_absolute_url }}/temperature/edit/{{ maxTemperatureID }}/">
+                                    <h4>{{ maxTemperature }}</h4></a>
+                            </td>
+                            <td>
+                                <a class="text-center small"
+                                   href="{{ temperature.get_absolute_url }}/temperature/edit/{{ maxHumidityID }}/">
+                                    <h4> {{ maxHumidity }}</h4></a>
+                            </td>
+                            <td>
+                                <a class="text-center small"
+                                   href="{{ temperature.get_absolute_url }}/temperature/edit/{{ minTemperatureID }}/">
+                                    <h4> {{ minTemperature }}</h4></a>
+                            </td>
+                            <td>
+                                <a class="text-center small"
+                                   href="{{ get_absolute_url }}/temperature/edit/{{ minHumidityID }}/">
+                                    <h4> {{ minHumidity }}</h4></a>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
         <div class="row">
-            <div id="Readings" class="text-center col-lg-12">
+            <div class="text-center col-md-8">
                 {% if is_paginated %}
                     <ul class='pagination pagination-sm'>
                         <li>
@@ -71,29 +72,36 @@
                         </li>
                    </ul>
                 {% endif %}
-
                 <table class='table table-striped table-hover'>
-                    <tr>
-                        <th class="text-center"><h2>Reading Time</h2></th>
-                        <th class="text-center"><h2>Temp (F)</h2></th>
-                        <th class="text-center"><h2>Humidity</h2></th>
-                    </tr>
-
-                    {% for temperature in object_list %}
+                    <thead>
                         <tr>
-                            <td>
-                                <a class="text-center small" href="{{ temperature.get_absolute_url }}"><h4> {{ temperature.ReadingDateTime }} </h4></a>
-                            </td>
-                            <td>
-                                <a class="text-center small" href="{{ temperature.get_absolute_url }}"><h4> {{ temperature.TempF }} </h4></a>
-                            </td>
-                            <td>
-                                <a class="text-center small" href="{{ temperature.get_absolute_url }}"><h4> {{ temperature.Humidity }} </h4></a>
-                            </td>
+                            <th class="text-center"><h4>Reading Time</h4></th>
+                            <th class="text-center"><h4>Temp (F)</h4></th>
+                            <th class="text-center"><h4>Humidity</h4></th>
                         </tr>
-                    {% endfor %}
+                    </thead>
+                    <tbody>
+                        {% for temperature in object_list %}
+                            <tr>
+                                <td>
+                                    <a class="text-center small" href="{{ temperature.get_absolute_url }}">
+                                        <h5> {{ temperature.ReadingDateTime }} </h5>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="text-center small" href="{{ temperature.get_absolute_url }}">
+                                        <h5> {{ temperature.TempF }} </h5>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="text-center small" href="{{ temperature.get_absolute_url }}">
+                                        <h5> {{ temperature.Humidity }} </h5>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
-
                 {% if is_paginated %}
                     <ul class='pagination pagination-sm'>
                         <li>
@@ -124,5 +132,4 @@
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

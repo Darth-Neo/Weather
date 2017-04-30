@@ -1,22 +1,18 @@
-from django.http import HttpResponse
-from django.views.generic import View
-from django.views.generic import ListView
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+import logging
 
 from django.core.urlresolvers import reverse
-
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
 from django.views.generic import CreateView
-from django.views.generic import UpdateView
 from django.views.generic import DeleteView
 from django.views.generic import DetailView
+from django.views.generic import ListView
+from django.views.generic import UpdateView
 
-from django.db.models import Max
-from django.db.models import Min
 from models import Temperature
 
-import logging
 logger = logging.getLogger(__name__)
+
 
 # @register.filter
 # def pdb(element):
@@ -25,7 +21,6 @@ logger = logging.getLogger(__name__)
 
 
 class ListTemperatureView(ListView):
-
     model = Temperature
     template_name = u'temperature_list.html'
     paginate_by = 20
@@ -58,11 +53,13 @@ class ListTemperatureView(ListView):
         context[u'minHumidity'] = u"%s on %s" % (minHumidity, minReadingDateTime)
         context[u'minHumidityID'] = minHumidityID
 
-        self.object_list = context[u'object_list']
+        self.object_list = list([x for x in context[u'object_list'] if "temperature" in context[u'object_list']])
+        # self.object_list = context[u'object_list']
 
         return context
 
-    def get_minTemperature(self, object_list):
+    @staticmethod
+    def get_minTemperature(object_list):
 
         minTemperature = 200.0
         minReadingDateTime = None
@@ -78,7 +75,8 @@ class ListTemperatureView(ListView):
 
         return minTemperature, minReadingDateTime, minTemperatureID
 
-    def get_maxTemperature(self, object_list):
+    @staticmethod
+    def get_maxTemperature(object_list):
 
         maxTemperature = 0.0
         maxReadingDateTime = None
@@ -97,7 +95,8 @@ class ListTemperatureView(ListView):
     #
     # Humidity
     #
-    def get_minHumidity(self, object_list):
+    @staticmethod
+    def get_minHumidity(object_list):
 
         minHumidity = 100.0
         minReadingDateTime = None
@@ -115,7 +114,8 @@ class ListTemperatureView(ListView):
 
         return minHumidity, minReadingDateTime, minHumidityID
 
-    def get_maxHumidity(self, object_list):
+    @staticmethod
+    def get_maxHumidity(object_list):
 
         maxHumidity = 0
         maxReadingDateTime = None
@@ -133,8 +133,8 @@ class ListTemperatureView(ListView):
 
         return maxHumidity, maxReadingDateTime, maxHumidityID
 
-class CreateTemperatureView(CreateView):
 
+class CreateTemperatureView(CreateView):
     model = Temperature
     template_name = u'temperature_edit.html'
 
@@ -142,7 +142,6 @@ class CreateTemperatureView(CreateView):
         return reverse(u'temperature_list')
 
     def get_context_data(self, **kwargs):
-
         context = super(CreateTemperatureView, self).get_context_data(**kwargs)
 
         context[u'action'] = reverse(u'temperature_new')
@@ -150,19 +149,17 @@ class CreateTemperatureView(CreateView):
         return context
 
 
-class UpdateTemperatureView(UpdateView):
-
+class EditTemperatureView(UpdateView):
     model = Temperature
     fields = u"__all__"
-    
+
     template_name = u'temperature_edit.html'
 
     def get_success_url(self):
         return reverse(u'temperature_list')
-  
-    def get_context_data(self, **kwargs):
 
-        context = super(UpdateTemperatureView, self).get_context_data(**kwargs)
+    def get_context_data(self, **kwargs):
+        context = super(EditTemperatureView, self).get_context_data(**kwargs)
 
         context[u'action'] = reverse(u'temperature_edit', kwargs={u'pk': self.get_object().id})
 
@@ -170,15 +167,15 @@ class UpdateTemperatureView(UpdateView):
 
 
 class DeleteTemperatureView(DeleteView):
-
     model = Temperature
     template_name = u'temperature_delete.html'
 
     def get_success_url(self):
-        return reverse(u'temperature_list')
+        tr = reverse(u'temperature_list')
+        return tr
 
 
 class TemperatureView(DetailView):
-
     model = Temperature
     template_name = u'temperature.html'
+    fields = u"__all__"

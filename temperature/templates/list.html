@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{# <a href="{% url 'aprs_messages_list' %}">APRS Messages</a> #}
+
+{% for temperature in temperatures %}
+    {# Each "temperature" is a Temperature model object. #}
+    {{ temperature.TempF }}<br />
+    ...
+{% endfor %}
+
+<div class="pagination">
+
+    <span class="step-links">
+        {% if temperature.has_previous %}
+            <a href="?page={{ temperature.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ temperature.number }} of {{ temperature.paginator.num_pages }}.
+        </span>
+
+        {% if temperature.has_next %}
+            <a href="?page={{ temperature.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock %}

@@ -4,12 +4,12 @@ Generate D3 Data as needed
 """
 # __author__ = 'james.morris'
 #
-import os
-import os.path
-import sqlite3
-import time
-from datetime import datetime
 import operator
+import sqlite3
+from datetime import datetime
+
+import os.path
+
 from Logger import *
 
 logger = setupLogging(u"GenerateD3Data")
@@ -32,11 +32,13 @@ class GenerateD3Data(object):
         self.adt = dict()
         self.dl = dict()
 
+        self.project = u"Weather2"
+
         if pathDir is None:
             home = os.getenv("$HOME")
-            pathDir = u"/home/james/PythonDev/Weather/Weather"
+            pathDir = u"/home/james/PythonDev/Weather/%s/" % self.project
 
-        db_file = u"Weather.db"
+        db_file = u"Weather2.db"
         data_file = u"data.tsv.run"
 
         if fileInput is None:
@@ -56,7 +58,7 @@ class GenerateD3Data(object):
                 raise IOError
 
         if fileOutput is None:
-            self.dataFileOutput = pathDir + os.sep + u"Weather" + os.sep + u"static" + os.sep + data_file
+            self.dataFileOutput = pathDir + os.sep + self.project + os.sep + u"static" + os.sep + data_file
         else:
             self.dataFileOutput = fileOutput
 
