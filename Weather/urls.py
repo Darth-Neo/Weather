@@ -17,14 +17,14 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
+
 from temperature import views
 
 urlpatterns = [
-    url(r"^$",    views.ListTemperatureView.as_view(), name="temperature_list",),
+    url(r"^$", views.ListTemperatureView.as_view(), name="temperature_list",),
     url(r"^admin", admin.site.urls),
     url(r"^temperature/", include("temperature.urls")),
-
 ]
 
-# Don't ever delete this line!!!!!!!!!!
+# !!!!!!!!!! Don't ever delete this line !!!!!!!!!!
 urlpatterns += staticfiles_urlpatterns()

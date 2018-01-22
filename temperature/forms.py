@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.forms.models import inlineformset_factory
 
 from models import Temperature
+import models
 
 
 class TemperatureForm(models.ModelForm):

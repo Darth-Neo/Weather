@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 args=("$@")
 export DIR="/home/james/PythonDev/Weather"
+cd $DIR
 source $DIR/bin/activate
 
 # test

@@ -5,7 +5,7 @@
             <h2>Clermont Weather</h2>
         </div>
         <div class="row">
-            <iframe src="/static/temp.html" width="1800" height="600" class="center">Graph</iframe>
+            <iframe src="./static/temp.html" width="1800" height="600" class="center well">Graph</iframe>
         </div>
         <div class="row">
             <div id="MinMax" class="col-sm-8">
@@ -56,11 +56,9 @@
                                 <a href="{% url 'temperature_list' %}?page={{page_obj.previous_page_number}}"><h4> < </h4></a>
                             </li>
                         {% endif %}
-
                         <li>
                              <span><h4> Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</h4> </span>
                         </li>
-
                         {% if page_obj.has_next %}
                             <li class="next">
                                 <a href="{% url 'temperature_list' %}?page={{ page_obj.next_page_number }}"><h4> > </h4></a>
@@ -84,17 +82,17 @@
                         {% for temperature in object_list %}
                             <tr>
                                 <td>
-                                    <a class="text-center small" href="{{ temperature.get_absolute_url }}">
+                                    <a class="text-center small" href="{% url 'temperature_edit' pk=temperature.id %}">
                                         <h5> {{ temperature.ReadingDateTime }} </h5>
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="text-center small" href="{{ temperature.get_absolute_url }}">
+                                    <a class="text-center small" href="{% url 'temperature_edit' pk=temperature.id %}">
                                         <h5> {{ temperature.TempF }} </h5>
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="text-center small" href="{{ temperature.get_absolute_url }}">
+                                    <a class="text-center small" href="{% url 'temperature_edit' pk=temperature.id %}">
                                         <h5> {{ temperature.Humidity }} </h5>
                                     </a>
                                 </td>

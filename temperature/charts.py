@@ -14,8 +14,8 @@ import django
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.dates import DateFormatter
-from Logger import *
 
+from Logger import *
 logger = setupLogging(__file__)
 logger.setLevel(DEBUG)
 
@@ -28,6 +28,7 @@ def existsFile(file_path):
     else:
         return False
 
+
 def getReadings(con=None):
 
     if con is None:
@@ -39,13 +40,7 @@ def getReadings(con=None):
         else:
             logger.error(u"File not found - %s" % file_path)
 
-
-    # sel = u"select ReadingDateTime, TempF, Humidity, Barometer \
-    #    from temperature_temperature order by id desc"
-
-
-    sel = u"select ReadingDateTime, TempF, Humidity \
-        from temperature_temperature order by id desc"
+    sel = u"select ReadingDateTime, TempF, Humidity from temperature_temperature order by id desc"
 
     cursor = conn.execute(sel)
 
@@ -80,6 +75,7 @@ def simple(request):
             try:
                 # 2015-02-07 23:00:00
                 dt = datetime.strptime(strDT, u'%Y-%b-%d %I:%M:%S')
+
             except Exception, msg:
                 logger.error(u"Error %s" % msg)
 
@@ -129,10 +125,11 @@ def simple(request):
 
     return response
 
-if __name__ == u"__main__":
+
+if __name__ == "__main__":
 
     home = os.getcwd()
 
-    conn_str = home + os.sep + u"Weather.db"
+    conn_str = home + os.sep + "Weather.db"
 
     conn = sqlite3.connect(conn_str)

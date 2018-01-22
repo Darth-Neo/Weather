@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/usr/bin/env sh
 export SDEV_HOME=/home/james/PythonDev/Weather/Weather
 export WEATHER_HOME=/home/pi/rpi
 

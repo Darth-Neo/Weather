@@ -69,7 +69,7 @@ def printReadings(conn):
 if __name__ == u"__main__":
     home = os.getcwd()
 
-    conn_str = home + os.sep + u"Weather.db.sav"
+    conn_str = home + os.sep + u"Weather.db"
     conn = sqlite3.connect(conn_str)
 
     print(u"Opened database successfully")

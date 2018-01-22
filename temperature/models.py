@@ -8,6 +8,7 @@ class Temperature(models.Model):
     ReadingDateTime = models.CharField(max_length=255, )
     TempF = models.CharField(max_length=255, )
     Humidity = models.CharField(max_length=255, )
+    id = None
 
     class Meta:
         ordering = [u"-id"]

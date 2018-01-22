@@ -54,7 +54,8 @@ class ListTemperatureView(ListView):
         context[u'minHumidityID'] = minHumidityID
 
         self.object_list = list([x for x in context[u'object_list'] if "temperature" in context[u'object_list']])
-        # self.object_list = context[u'object_list']
+
+        context[u'temperature'] = list([x for x in context[u'object_list']])
 
         return context
 

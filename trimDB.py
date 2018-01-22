@@ -4,24 +4,67 @@ import datetime
 import sqlite3
 
 from Logger import *
+
 logger = setupLogging(__file__)
-logger.setLevel(DEBUG)
+logger.setLevel(INFO)
 
-months = [u"%Dec%", u"%Nov%", u"%Oct%", u"%Sep%", u"%Jul%",
-          u"%Jun%", u"%May%", u"%Apr%", u"%Mar%", u"%Feb%", u"%Jan%",]
+months = [u"Dec", u"Jan", u"Feb", u"Mar", u"Apr", u"May", u"Jun", u"Jul",
+          u"Aug", u"Sep", u"Oct", u"Nov", u"Dec", u"Jan"]
 
-def trimReadings(conn, tcy):
-    logger.info(u"Trim %s %s%s" % (tcy[0], tcy[1][1:-1], os.linesep))
+
+def trimReadings(conn, id):
+
+    logger.info(u"id : {}".format(id))
+
+    trim = u"delete from temperature_temperature where id < ?"
+    logger.info(u"trim  : {}".format(trim))
 
     c = conn.cursor()
+    c.execute(trim, (id,))
+    c.close()
 
-    t = u"%d %s" % (tcy[0], tcy[1])
 
-    logger.info(u"%s" % t)
+def check_effect(conn):
 
-    trim = u"delete from temperature_temperature where ReadingDateTime like '{}'".format(t)
+    query = u"select min(id) from temperature_temperature"
+    logger.info(u"query : {}".format(query))
 
-    c.execute(trim)
+    c = conn.cursor()
+    c.execute(query)
+    id = c.fetchone()[0]
+    c.close()
+
+    get_fields(conn, id)
+
+
+def get_fields(conn, id):
+
+    query = u"select * from temperature_temperature where id=?"
+    logger.debug(u"query : {}".format(query))
+
+    c = conn.cursor()
+    c.execute(query, (id, ))
+    fields = c.fetchone()
+    c.close()
+
+    for n, x in enumerate(fields):
+        logger.info(u"  {} : {}".format(n, x))
+
+
+def get_id(conn, year, month):
+    y = year - 1
+    m = months[month]
+
+    query = u"select min(id) from temperature_temperature where ReadingDateTime like '{} {}%'".format(y, m)
+
+    logger.debug(u"query : {}".format(query))
+
+    c = conn.cursor()
+    c.execute(query)
+    id = c.fetchone()[0]
+    c.close()
+
+    return id
 
 
 if __name__ == u"__main__":
@@ -32,20 +75,31 @@ if __name__ == u"__main__":
     year = int(datetime.date.today().strftime(u"%Y"))
     month = int(datetime.date.today().strftime(u"%m"))
 
-    logger.debug(u"Year : %d" % year)
-    logger.debug(u"Month : %s" % months[month - 1][:-1])
+    logger.info(u"Year  : %d" % year)
+    logger.info(u"Month : %s" % months[month])
 
-    lm = list()
+    conn_str = u".%sWeather.db" % os.sep
+    with sqlite3.connect(conn_str) as conn:
 
-    # Go through current year
-    ty = [ (year, x) for x in months[12 - month:]]
-    cy = [ (year -1, x) for x in months[:12 - month]]
-    tcy = ty + cy
+        # Get ID
+        #
+        nid = int(get_id(conn, year, month))
+        logger.info(u"nid   : {}".format(nid))
 
-    for n, s in enumerate(tcy):
-        logger.debug(u"%d %d %s" % (n, s[0], s[1][:-1]))
+        # Get Fields
+        #
+        get_fields(conn, nid)
 
-    conn_str = u"Weather.db"
-    conn = sqlite3.connect(conn_str)
+        # Trim Database
+        #
+        trimReadings(conn, nid)
 
-    trimReadings(conn, tcy[10])
+
+    with sqlite3.connect(conn_str) as conn:
+
+        # Check that it worked!
+        #
+        check_effect(conn)
+
+
+
